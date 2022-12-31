@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Full Stack Developer | Premium Portfolio</title>
+  <meta name="description" content="Professional portfolio of a Full Stack Developer specializing in Next.js, FastAPI, Django, Telegram Bots, and AI integrations." />
+  <meta property="og:title" content="Full Stack Developer | Premium Portfolio" />
+  <meta property="og:description" content="Building scalable, modern, and beautiful web applications." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: {
+              400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
+            }
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'float2': 'float 8s ease-in-out infinite 2s',
+            'pulse-slow': 'pulse 4s ease-in-out infinite',
+            'spin-slow': 'spin 20s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%,100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; transition: background-color .3s, color .3s; }
+
+    /* Glassmorphism */
+    .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.12); }
+    .glass-light { background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.5); }
+    .dark .glass-light { background: rgba(10,10,20,0.6); border: 1px solid rgba(255,255,255,0.08); }
+
+    /* Gradient text */
+    .gradient-text { background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* Orbs */
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25; pointer-events: none; }
+
+    /* Skill bar */
+    .skill-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden; }
+    .skill-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #0ea5e9, #818cf8); transition: width 1.5s ease; width: 0%; }
+
+    /* Nav link underline */
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: linear-gradient(90deg, #38bdf8, #818cf8); border-radius: 2px; transition: width .3s; }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Cards */
+    .project-card { transition: transform .3s, box-shadow .3s; }
+    .project-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(14,165,233,0.15); }
+
+    /* Form inputs */
+    .form-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: inherit; transition: border-color .3s, box-shadow .3s; }
+    .form-input:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14,165,233,0.15); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
+
+    /* Section fade-in */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Cursor glow */
+    #cursor-glow { position: fixed; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(14,165,233,0.08) 0%, transparent 70%); pointer-events: none; z-index: 0; transform: translate(-50%,-50%); transition: left .1s, top .1s; }
+
+    /* Loading screen */
+    #loader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity .8s; }
+    #loader.hidden { opacity: 0; pointer-events: none; }
+
+    /* Filter chip active */
+    .filter-btn.active { background: linear-gradient(135deg, #0ea5e9, #818cf8); color: white; border-color: transparent; }
+
+    /* Typed cursor blink */
+    .typed-cursor { animation: blink 1s step-start infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Mobile menu */
+    #mobile-menu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    #mobile-menu.open { max-height: 400px; }
+
+    /* Testimonial slider */
+    .testimonial-slider { display: flex; transition: transform .5s ease; }
+  </style>
+</head>
+
+<body class="bg-[#050510] text-white min-h-screen">
+
+  <!-- Cursor Glow -->
+  <div id="cursor-glow"></div>
+
+  <!-- Loading Screen -->
+  <div id="loader">
+    <div class="text-center">
+      <div class="w-16 h-16 mx-auto mb-4 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+      <p class="gradient-text text-xl font-bold tracking-widest">LOADING</p>
+    </div>
+  </div>
+
+  <!-- ==================== HEADER ==================== -->
+  <header id="header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-5">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <a href="#" class="text-2xl font-black gradient-text tracking-tight">DEV.</a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#about" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors" data-i18n="nav_about">About</a>
+        <a href="#projects" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors" data-i18n="nav_projects">Projects</a>
+        <a href="#experience" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors" data-i18n="nav_skills">Skills</a>
+        <a href="#services" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors" data-i18n="nav_services">Services</a>
+        <a href="#contact" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors" data-i18n="nav_contact">Contact</a>
+        
+        <!-- Language Switcher -->
+        <div class="flex items-center gap-1 glass p-1 rounded-lg ml-2">
+          <button onclick="setLanguage('uz')" class="lang-btn text-[10px] font-bold px-1.5 py-0.5 rounded transition-all" data-lang="uz">UZ</button>
+          <button onclick="setLanguage('ru')" class="lang-btn text-[10px] font-bold px-1.5 py-0.5 rounded transition-all" data-lang="ru">RU</button>
+          <button onclick="setLanguage('en')" class="lang-btn text-[10px] font-bold px-1.5 py-0.5 rounded transition-all" data-lang="en">EN</button>
+        </div>
+
+        <button id="theme-btn" onclick="toggleTheme()" class="p-2 rounded-full glass text-gray-300 hover:text-white transition-colors">
+          <svg id="sun-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+          <svg id="moon-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+      </nav>
+
+      <!-- Mobile hamburger -->
+      <div class="md:hidden flex items-center gap-3">
+        <button onclick="toggleTheme()" class="p-2 rounded-full glass text-gray-300">
+          <svg id="sun-icon-m" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+          <svg id="moon-icon-m" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+        <button onclick="toggleMobileMenu()" class="p-2 glass rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden glass-light mx-4 mt-2 rounded-2xl">
+      <div class="p-6 flex flex-col gap-4">
+        <a href="#about" onclick="toggleMobileMenu()" class="text-base font-medium hover:text-primary-400 transition-colors" data-i18n="nav_about">About</a>
+        <a href="#projects" onclick="toggleMobileMenu()" class="text-base font-medium hover:text-primary-400 transition-colors" data-i18n="nav_projects">Projects</a>
+        <a href="#experience" onclick="toggleMobileMenu()" class="text-base font-medium hover:text-primary-400 transition-colors" data-i18n="nav_skills">Skills</a>
+        <a href="#services" onclick="toggleMobileMenu()" class="text-base font-medium hover:text-primary-400 transition-colors" data-i18n="nav_services">Services</a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="text-base font-medium hover:text-primary-400 transition-colors" data-i18n="nav_contact">Contact</a>
+        <div class="flex items-center gap-2 mt-2 pt-4 border-t border-white/5">
+          <button onclick="setLanguage('uz')" class="lang-btn-m flex-1 text-xs font-bold py-2 rounded glass" data-lang="uz">UZ</button>
+          <button onclick="setLanguage('ru')" class="lang-btn-m flex-1 text-xs font-bold py-2 rounded glass" data-lang="ru">RU</button>
+          <button onclick="setLanguage('en')" class="lang-btn-m flex-1 text-xs font-bold py-2 rounded glass" data-lang="en">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO ==================== -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <!-- Background Orbs -->
+    <div class="orb w-[600px] h-[600px] bg-sky-500 top-[-100px] left-[-150px] animate-float"></div>
+    <div class="orb w-[500px] h-[500px] bg-violet-600 bottom-[-100px] right-[-100px] animate-float2"></div>
+    <div class="orb w-[300px] h-[300px] bg-fuchsia-500 top-[40%] left-[40%] animate-pulse-slow"></div>
+
+    <!-- Grid pattern -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(#38bdf8 1px, transparent 1px), linear-gradient(90deg, #38bdf8 1px, transparent 1px); background-size: 50px 50px;"></div>
+
+    <div class="relative z-10 text-center max-w-5xl mx-auto px-6">
+      <div class="inline-flex items-center gap-2 glass px-4 py-2 rounded-full text-sm font-medium text-primary-400 mb-8 border border-primary-500/20">
+        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+        <span data-i18n="hero_available">Available for freelance projects</span>
+      </div>
+
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.05] tracking-tight">
+        <span data-i18n="hero_hi">Hi, I'm a</span><br/>
+        <span class="gradient-text" id="typed-text"></span><span class="typed-cursor gradient-text">|</span>
+      </h1>
+
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed" data-i18n="hero_desc">
+        I build <strong class="text-white">premium digital products</strong> — from blazing-fast APIs and full-stack web apps to intelligent Telegram bots and AI-powered tools.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#projects" class="group px-8 py-4 bg-gradient-to-r from-primary-600 to-violet-600 hover:from-primary-500 hover:to-violet-500 text-white rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-primary-500/25 flex items-center gap-2">
+          <span data-i18n="hero_view_work">View My Work</span>
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+        <a href="#contact" class="px-8 py-4 glass rounded-full font-bold hover:bg-white/10 transition-all duration-300 transform hover:scale-105 border border-white/10" data-i18n="hero_hire_me">
+          Hire Me
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-20 grid grid-cols-3 gap-8 max-w-lg mx-auto">
+        <div class="text-center">
+          <p class="text-3xl font-black gradient-text">3+</p>
+          <p class="text-xs text-gray-500 mt-1 uppercase tracking-wider" data-i18n="hero_years">Years Exp.</p>
+        </div>
+        <div class="text-center border-x border-white/10">
+          <p class="text-3xl font-black gradient-text">50+</p>
+          <p class="text-xs text-gray-500 mt-1 uppercase tracking-wider" data-i18n="hero_projects">Projects</p>
+        </div>
+        <div class="text-center">
+          <p class="text-3xl font-black gradient-text">20+</p>
+          <p class="text-xs text-gray-500 mt-1 uppercase tracking-wider" data-i18n="hero_clients">Clients</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+      <p class="text-xs text-gray-600 uppercase tracking-widest" data-i18n="hero_scroll">Scroll</p>
+      <div class="w-px h-10 bg-gradient-to-b from-primary-500 to-transparent"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT ==================== -->
+  <section id="about" class="py-28 px-6 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <!-- Left: Bio -->
+        <div class="reveal">
+          <p class="text-primary-400 font-semibold tracking-widest text-sm uppercase mb-4" data-i18n="about_subtitle">About Me</p>
+          <h2 class="text-4xl md:text-5xl font-black mb-6 leading-tight" data-i18n="about_title">
+            Turning Complex<br/><span class="gradient-text">Ideas Into Reality.</span>
+          </h2>
+          <p class="text-gray-400 text-lg leading-relaxed mb-6" data-i18n="about_p1">
+            I'm a passionate <strong class="text-white">Full Stack Developer</strong> with 3+ years of experience building end-to-end solutions. I specialize in Python back-ends (FastAPI & Django), reactive frontends with React/Next.js, and automation tools like Telegram bots.
+          </p>
+          <p class="text-gray-400 text-lg leading-relaxed mb-8" data-i18n="about_p2">
+            I believe in clean architecture, pixel-perfect design, and shipping fast without cutting corners. Every project I take on gets my full commitment.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <span class="px-4 py-2 glass rounded-full text-sm font-medium text-primary-300">🐍 Python</span>
+            <span class="px-4 py-2 glass rounded-full text-sm font-medium text-primary-300">⚡ FastAPI</span>
+            <span class="px-4 py-2 glass rounded-full text-sm font-medium text-primary-300">🌐 Django</span>
+            <span class="px-4 py-2 glass rounded-full text-sm font-medium text-primary-300">⚛️ React</span>
+            <span class="px-4 py-2 glass rounded-full text-sm font-medium text-primary-300">🔷 Next.js</span>
+            <span class="px-4 py-2 glass rounded-full text-sm font-medium text-primary-300">🐘 PostgreSQL</span>
+            <span class="px-4 py-2 glass rounded-full text-sm font-medium text-primary-300">🤖 aiogram</span>
+            <span class="px-4 py-2 glass rounded-full text-sm font-medium text-primary-300">🐳 Docker</span>
+          </div>
+        </div>
+
+        <!-- Right: Cards -->
+        <div class="reveal grid grid-cols-2 gap-5">
+          <div class="glass rounded-2xl p-6 hover:border-primary-500/30 transition-colors cursor-default">
+            <div class="text-3xl mb-3">🌐</div>
+            <h3 class="font-bold text-white mb-1" data-i18n="about_card_front">Frontend Dev</h3>
+            <p class="text-sm text-gray-400" data-i18n="about_card_front_desc">React, Next.js, Tailwind, TypeScript</p>
+          </div>
+          <div class="glass rounded-2xl p-6 hover:border-violet-500/30 transition-colors cursor-default">
+            <div class="text-3xl mb-3">⚡</div>
+            <h3 class="font-bold text-white mb-1" data-i18n="about_card_back">Backend Dev</h3>
+            <p class="text-sm text-gray-400" data-i18n="about_card_back_desc">FastAPI, Django, REST, PostgreSQL</p>
+          </div>
+          <div class="glass rounded-2xl p-6 hover:border-fuchsia-500/30 transition-colors cursor-default">
+            <div class="text-3xl mb-3">🤖</div>
+            <h3 class="font-bold text-white mb-1" data-i18n="about_card_bots">Telegram Bots</h3>
+            <p class="text-sm text-gray-400" data-i18n="about_card_bots_desc">aiogram, business automation, AI bots</p>
+          </div>
+          <div class="glass rounded-2xl p-6 hover:border-emerald-500/30 transition-colors cursor-default">
+            <div class="text-3xl mb-3">🧠</div>
+            <h3 class="font-bold text-white mb-1" data-i18n="about_card_ai">AI Integration</h3>
+            <p class="text-sm text-gray-400" data-i18n="about_card_ai_desc">OpenAI, LangChain, embeddings</p>
+          </div>
+          <div class="col-span-2 glass rounded-2xl p-6 hover:border-sky-500/30 transition-colors cursor-default flex items-center gap-4">
+            <div class="text-3xl">🐳</div>
+            <div>
+              <h3 class="font-bold text-white mb-1" data-i18n="about_card_devops">DevOps & Deployment</h3>
+              <p class="text-sm text-gray-400" data-i18n="about_card_devops_desc">Docker, Vercel, Render, GitHub Actions, CI/CD</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROJECTS ==================== -->
+  <section id="projects" class="py-28 px-6 relative overflow-hidden">
+    <div class="orb w-[400px] h-[400px] bg-primary-600 top-0 right-0 opacity-10"></div>
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-primary-400 font-semibold tracking-widest text-sm uppercase mb-4" data-i18n="projects_subtitle">My Work</p>
+        <h2 class="text-4xl md:text-5xl font-black mb-4" data-i18n="projects_title">Featured <span class="gradient-text">Projects</span></h2>
+        <p class="text-gray-400 max-w-xl mx-auto" data-i18n="projects_desc">A curated selection of projects across web development, AI, and automation.</p>
+      </div>
+
+      <!-- Filter buttons -->
+      <div class="flex flex-wrap justify-center gap-3 mb-12 reveal">
+        <button onclick="filterProjects('All')" class="filter-btn active px-5 py-2 glass rounded-full text-sm font-semibold transition-all duration-300" data-filter="All" data-i18n="projects_filter_all">All</button>
+        <button onclick="filterProjects('Web')" class="filter-btn px-5 py-2 glass rounded-full text-sm font-semibold transition-all duration-300" data-filter="Web" data-i18n="projects_filter_web">🌐 Web</button>
+        <button onclick="filterProjects('Bots')" class="filter-btn px-5 py-2 glass rounded-full text-sm font-semibold transition-all duration-300" data-filter="Bots" data-i18n="projects_filter_bots">🤖 Bots</button>
+        <button onclick="filterProjects('AI')" class="filter-btn px-5 py-2 glass rounded-full text-sm font-semibold transition-all duration-300" data-filter="AI" data-i18n="projects_filter_ai">🧠 AI</button>
+      </div>
+
+      <!-- Projects grid -->
+      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EXPERIENCE / SKILLS ==================== -->
+  <section id="experience" class="py-28 px-6 relative">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-primary-400 font-semibold tracking-widest text-sm uppercase mb-4" data-i18n="skills_subtitle">Expertise</p>
+        <h2 class="text-4xl md:text-5xl font-black mb-4" data-i18n="skills_title">Skills & <span class="gradient-text">Experience</span></h2>
+        <p class="text-gray-400 max-w-xl mx-auto" data-i18n="skills_desc">Technologies and tools I use to craft premium digital solutions.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8 max-w-4xl mx-auto reveal" id="skills-container">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SERVICES ==================== -->
+  <section id="services" class="py-28 px-6 relative overflow-hidden">
+    <div class="orb w-[500px] h-[500px] bg-violet-600 bottom-0 left-0 opacity-10"></div>
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-primary-400 font-semibold tracking-widest text-sm uppercase mb-4" data-i18n="services_subtitle">What I Offer</p>
+        <h2 class="text-4xl md:text-5xl font-black mb-4" data-i18n="services_title">My <span class="gradient-text">Services</span></h2>
+        <p class="text-gray-400 max-w-xl mx-auto" data-i18n="services_desc">End-to-end solutions tailored to your business goals.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="reveal glass rounded-2xl p-8 text-center group hover:border-primary-500/40 transition-all duration-300">
+          <div class="w-16 h-16 mx-auto mb-6 glass rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">🌐</div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-primary-400 transition-colors" data-i18n="service_web_title">Web Development</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="service_web_desc">Full-stack web apps with Next.js frontend and FastAPI/Django backend — fast, responsive, and SEO-optimized.</p>
+          <ul class="mt-4 text-left text-xs text-gray-500 space-y-1">
+            <li class="flex items-center gap-2"><span class="text-primary-400">✓</span> Custom UI/UX Design</li>
+            <li class="flex items-center gap-2"><span class="text-primary-400">✓</span> REST API Integration</li>
+            <li class="flex items-center gap-2"><span class="text-primary-400">✓</span> Admin Panels & Dashboards</li>
+            <li class="flex items-center gap-2"><span class="text-primary-400">✓</span> Deploy to Vercel / Render</li>
+          </ul>
+        </div>
+        <div class="reveal glass rounded-2xl p-8 text-center group hover:border-violet-500/40 transition-all duration-300">
+          <div class="w-16 h-16 mx-auto mb-6 glass rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">🤖</div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-violet-400 transition-colors" data-i18n="service_bots_title">Telegram Bots</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="service_bots_desc">Intelligent bots for e-commerce, customer support, task automation, and AI-powered conversational experiences.</p>
+          <ul class="mt-4 text-left text-xs text-gray-500 space-y-1">
+            <li class="flex items-center gap-2"><span class="text-violet-400">✓</span> Custom Command Handlers</li>
+            <li class="flex items-center gap-2"><span class="text-violet-400">✓</span> Payment & E-Commerce Bots</li>
+            <li class="flex items-center gap-2"><span class="text-violet-400">✓</span> AI / GPT Integration</li>
+            <li class="flex items-center gap-2"><span class="text-violet-400">✓</span> Admin Notification Systems</li>
+          </ul>
+        </div>
+        <div class="reveal glass rounded-2xl p-8 text-center group hover:border-fuchsia-500/40 transition-all duration-300">
+          <div class="w-16 h-16 mx-auto mb-6 glass rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">⚡</div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-fuchsia-400 transition-colors" data-i18n="service_api_title">API Development</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="service_api_desc">Blazing-fast, scalable, and secure REST APIs built with FastAPI or Django REST Framework — fully documented.</p>
+          <ul class="mt-4 text-left text-xs text-gray-500 space-y-1">
+            <li class="flex items-center gap-2"><span class="text-fuchsia-400">✓</span> OpenAPI / Swagger Docs</li>
+            <li class="flex items-center gap-2"><span class="text-fuchsia-400">✓</span> Auth (JWT / OAuth2)</li>
+            <li class="flex items-center gap-2"><span class="text-fuchsia-400">✓</span> Database Design</li>
+            <li class="flex items-center gap-2"><span class="text-fuchsia-400">✓</span> Rate Limiting & Security</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TESTIMONIALS ==================== -->
+  <section id="testimonials" class="py-28 px-6 relative overflow-hidden">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-primary-400 font-semibold tracking-widest text-sm uppercase mb-4" data-i18n="testi_subtitle">Kind Words</p>
+        <h2 class="text-4xl md:text-5xl font-black mb-4" data-i18n="testi_title">Client <span class="gradient-text">Testimonials</span></h2>
+      </div>
+      <div class="relative overflow-hidden rounded-2xl reveal">
+        <div id="testimonial-track" class="testimonial-slider">
+          <div class="glass rounded-2xl p-10 min-w-full text-center">
+            <p class="text-2xl text-gray-300 leading-relaxed italic mb-8">"Absolutely outstanding work. Built our entire e-commerce platform in record time. Clean code, excellent communication, and zero bugs in production."</p>
+            <div class="flex items-center justify-center gap-3">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-violet-500 flex items-center justify-center font-bold text-lg">A</div>
+              <div class="text-left">
+                <p class="font-bold">Ahmad K.</p>
+                <p class="text-sm text-gray-500">CEO, TechStart</p>
+              </div>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-10 min-w-full text-center">
+            <p class="text-2xl text-gray-300 leading-relaxed italic mb-8">"The Telegram bot he built transformed our customer service. Response times dropped by 80% and sales went up. Highly recommend!"</p>
+            <div class="flex items-center justify-center gap-3">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center font-bold text-lg">S</div>
+              <div class="text-left">
+                <p class="font-bold">Sara M.</p>
+                <p class="text-sm text-gray-500">Founder, ShopEasy</p>
+              </div>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-10 min-w-full text-center">
+            <p class="text-2xl text-gray-300 leading-relaxed italic mb-8">"Professional, fast, and incredibly talented. The FastAPI backend he built handles thousands of requests per second flawlessly."</p>
+            <div class="flex items-center justify-center gap-3">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-primary-500 flex items-center justify-center font-bold text-lg">J</div>
+              <div class="text-left">
+                <p class="font-bold">James R.</p>
+                <p class="text-sm text-gray-500">CTO, DataFlow Inc.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Controls -->
+        <div class="flex justify-center gap-3 mt-8">
+          <button onclick="prevTestimonial()" class="p-3 glass rounded-full hover:bg-white/10 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button onclick="nextTestimonial()" class="p-3 glass rounded-full hover:bg-white/10 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT ==================== -->
+  <section id="contact" class="py-28 px-6 relative overflow-hidden">
+    <div class="orb w-[400px] h-[400px] bg-primary-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5"></div>
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-primary-400 font-semibold tracking-widest text-sm uppercase mb-4" data-i18n="contact_subtitle">Get In Touch</p>
+        <h2 class="text-4xl md:text-5xl font-black mb-4" data-i18n="contact_title">Let's <span class="gradient-text">Work Together</span></h2>
+        <p class="text-gray-400" data-i18n="contact_desc">Have a project in mind? I'd love to hear from you.</p>
+      </div>
+
+      <div class="glass rounded-3xl p-8 md:p-12 reveal">
+        <form id="contact-form" onsubmit="submitContact(event)" class="flex flex-col gap-5">
+          <div class="relative">
+            <label class="block text-sm font-medium text-gray-400 mb-2" data-i18n="contact_name">Your Name</label>
+            <input id="c-name" type="text" placeholder="John Doe" required class="form-input w-full px-4 py-3.5 rounded-xl text-white placeholder-gray-600 focus:outline-none"/>
+          </div>
+          <div class="relative">
+            <label class="block text-sm font-medium text-gray-400 mb-2" data-i18n="contact_email">Email Address</label>
+            <input id="c-email" type="email" placeholder="john@example.com" required class="form-input w-full px-4 py-3.5 rounded-xl text-white placeholder-gray-600 focus:outline-none"/>
+          </div>
+          <div class="relative">
+            <label class="block text-sm font-medium text-gray-400 mb-2" data-i18n="contact_message">Message</label>
+            <textarea id="c-message" rows="5" placeholder="Tell me about your project..." required class="form-input w-full px-4 py-3.5 rounded-xl text-white placeholder-gray-600 focus:outline-none resize-none"></textarea>
+          </div>
+          <button type="submit" id="submit-btn" class="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-primary-600 to-violet-600 hover:from-primary-500 hover:to-violet-500 text-white rounded-xl font-bold transition-all duration-300 transform hover:scale-[1.02] shadow-xl shadow-primary-500/20">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            <span id="btn-text" data-i18n="contact_send">Send Message</span>
+          </button>
+          <div id="form-msg" class="hidden text-center text-sm font-medium py-3 rounded-xl"></div>
+        </form>
+      </div>
+
+      <div class="mt-8 text-center reveal">
+        <p class="text-gray-500 mb-4" data-i18n="contact_direct">Or reach me directly</p>
+        <a href="https://t.me/yourusername" target="_blank" class="inline-flex items-center gap-2 px-7 py-3.5 bg-[#0088cc] hover:bg-[#0099dd] text-white rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L6.12 14.073l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.696.513z"/></svg>
+          <span data-i18n="contact_telegram">Message on Telegram</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-white/5 py-12 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <div>
+        <a href="#" class="text-2xl font-black gradient-text">DEV.</a>
+        <p class="text-sm text-gray-600 mt-1" data-i18n="footer_build">Building the future, one line at a time.</p>
+      </div>
+      <div class="flex gap-4">
+        <a href="https://github.com" target="_blank" class="p-3 glass rounded-full hover:border-primary-500/40 hover:text-primary-400 transition-all duration-300">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </a>
+        <a href="https://linkedin.com" target="_blank" class="p-3 glass rounded-full hover:border-blue-500/40 hover:text-blue-400 transition-all duration-300">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://t.me/yourusername" target="_blank" class="p-3 glass rounded-full hover:border-sky-500/40 hover:text-sky-400 transition-all duration-300">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L6.12 14.073l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.696.513z"/></svg>
+        </a>
+      </div>
+      <p class="text-sm text-gray-600">© <span id="year"></span> <span data-i18n="footer_rights">Full Stack Developer. All rights reserved.</span></p>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Translations ----
+    const i18n = {
+      en: {
+        nav_about: 'About', nav_projects: 'Projects', nav_skills: 'Skills', nav_services: 'Services', nav_contact: 'Contact',
+        hero_available: 'Available for freelance projects',
+        hero_hi: "Hi, I'm a",
+        hero_desc: 'I build <strong class="text-white">premium digital products</strong> — from blazing-fast APIs and full-stack web apps to intelligent Telegram bots and AI-powered tools.',
+        hero_view_work: 'View My Work', hero_hire_me: 'Hire Me',
+        hero_years: 'Years Exp.', hero_projects: 'Projects', hero_clients: 'Clients', hero_scroll: 'Scroll',
+        about_subtitle: 'About Me', about_title: 'Turning Complex<br/><span class="gradient-text">Ideas Into Reality.</span>',
+        about_p1: "I'm a passionate <strong class=\"text-white\">Full Stack Developer</strong> with 3+ years of experience building end-to-end solutions. I specialize in Python back-ends (FastAPI & Django), reactive frontends with React/Next.js, and automation tools like Telegram bots.",
+        about_p2: 'I believe in clean architecture, pixel-perfect design, and shipping fast without cutting corners. Every project I take on gets my full commitment.',
+        about_card_front: 'Frontend Dev', about_card_front_desc: 'React, Next.js, Tailwind, TypeScript',
+        about_card_back: 'Backend Dev', about_card_back_desc: 'FastAPI, Django, REST, PostgreSQL',
+        about_card_bots: 'Telegram Bots', about_card_bots_desc: 'aiogram, business automation, AI bots',
+        about_card_ai: 'AI Integration', about_card_ai_desc: 'OpenAI, LangChain, embeddings',
+        about_card_devops: 'DevOps & Deployment', about_card_devops_desc: 'Docker, Vercel, Render, GitHub Actions, CI/CD',
+        projects_subtitle: 'My Work', projects_title: 'Featured <span class="gradient-text">Projects</span>',
+        projects_desc: 'A curated selection of projects across web development, AI, and automation.',
+        projects_filter_all: 'All', projects_filter_web: '🌐 Web', projects_filter_bots: '🤖 Bots', projects_filter_ai: '🧠 AI',
+        skills_subtitle: 'Expertise', skills_title: 'Skills & <span class="gradient-text">Experience</span>',
+        skills_desc: 'Technologies and tools I use to craft premium digital solutions.',
+        services_subtitle: 'What I Offer', services_title: 'My <span class="gradient-text">Services</span>',
+        services_desc: 'End-to-end solutions tailored to your business goals.',
+        service_web_title: 'Web Development', service_web_desc: 'Full-stack web apps with Next.js frontend and FastAPI/Django backend — fast, responsive, and SEO-optimized.',
+        service_bots_title: 'Telegram Bots', service_bots_desc: 'Intelligent bots for e-commerce, customer support, task automation, and AI-powered conversational experiences.',
+        service_api_title: 'API Development', service_api_desc: 'Blazing-fast, scalable, and secure REST APIs built with FastAPI or Django REST Framework — fully documented.',
+        testi_subtitle: 'Kind Words', testi_title: 'Client <span class="gradient-text">Testimonials</span>',
+        contact_subtitle: 'Get In Touch', contact_title: "Let's <span class=\"gradient-text\">Work Together</span>",
+        contact_desc: 'Have a project in mind? I\'d love to hear from you.',
+        contact_name: 'Your Name', contact_email: 'Email Address', contact_message: 'Message',
+        contact_send: 'Send Message', contact_sending: 'Sending...',
+        contact_success: '✅ Message sent! I\'ll get back to you shortly.',
+        contact_error: '⚠️ Could not send message. Please email me directly.',
+        contact_direct: 'Or reach me directly', contact_telegram: 'Message on Telegram',
+        footer_build: 'Building the future, one line at a time.',
+        footer_rights: 'Full Stack Developer. All rights reserved.',
+        roles: ['Full Stack Developer', 'FastAPI Expert', 'Next.js Engineer', 'Bot Developer']
+      },
+      uz: {
+        nav_about: 'Haqimda', nav_projects: 'Loyihalar', nav_skills: 'Ko\'nikmalar', nav_services: 'Xizmatlar', nav_contact: 'Aloqa',
+        hero_available: 'Frilans loyihalar uchun ochiqman',
+        hero_hi: "Salom, men",
+        hero_desc: 'Men <strong class="text-white">premium raqamli mahsulotlar</strong> yarataman — tezyurar APIlar va full-stack veb-ilovalaridan tortib, aqlli Telegram botlari va AI vositalarigacha.',
+        hero_view_work: 'Ishlarimni ko\'rish', hero_hire_me: 'Bog\'lanish',
+        hero_years: 'Yillik tajriba', hero_projects: 'Loyihalar', hero_clients: 'Mijozlar', hero_scroll: 'Pastga',
+        about_subtitle: 'Men haqimda', about_title: 'Murakkab g\'oyalarni<br/><span class="gradient-text">Haqiqatga aylantiraman.</span>',
+        about_p1: "Men <strong class=\"text-white\">Full Stack Dasturchiman</strong>, 3 yildan ortiq tajribaga egaman. Python bekendlari (FastAPI va Django), React/Next.js frontendlari va Telegram botlari bilan shug'ullanaman.",
+        about_p2: 'Men toza arxitektura, piksel darajasidagi aniq dizayn va sifatli ishlashga ishonaman. Har bir loyiha mening to\'liq e\'tiborimda bo\'ladi.',
+        about_card_front: 'Frontend dasturchi', about_card_front_desc: 'React, Next.js, Tailwind, TypeScript',
+        about_card_back: 'Backend dasturchi', about_card_back_desc: 'FastAPI, Django, REST, PostgreSQL',
+        about_card_bots: 'Telegram botlar', about_card_bots_desc: 'aiogram, biznesni avtomatlashtirish, AI botlar',
+        about_card_ai: 'AI integratsiya', about_card_ai_desc: 'OpenAI, LangChain, embeddings',
+        about_card_devops: 'DevOps va Joylashtirish', about_card_devops_desc: 'Docker, Vercel, Render, GitHub jurnallari, CI/CD',
+        projects_subtitle: 'Mening ishlarim', projects_title: 'Tanlangan <span class="gradient-text">Loyihalar</span>',
+        projects_desc: 'Veb-ishlab chiqish, AI va avtomatlashtirishga oid loyihalar to\'plami.',
+        projects_filter_all: 'Barchasi', projects_filter_web: '🌐 Veb', projects_filter_bots: '🤖 Botlar', projects_filter_ai: '🧠 AI',
+        skills_subtitle: 'Tajriba', skills_title: 'Ko\'nikmalar va <span class="gradient-text">Tajriba</span>',
+        skills_desc: 'Premium raqamli yechimlarni yaratishda foydalanadigan texnologiyalarim.',
+        services_subtitle: 'Xizmatlarim', services_title: 'Mening <span class="gradient-text">Xizmatlarim</span>',
+        services_desc: 'Sizning biznes maqsadlaringizga moslashtirilgan yechimlar.',
+        service_web_title: 'Veb ishlab chiqish', service_web_desc: 'Next.js frontend va FastAPI/Django bekendlari bilan full-stack veb-ilovalar — tezkor, moslashuvchan va SEO-optimallashtirilgan.',
+        service_bots_title: 'Telegram botlari', service_bots_desc: 'Elektron tijorat, mijozlarni qo\'llab-quvvatlash, vazifalarni avtomatlashtirish va AI suhbat botlari.',
+        service_api_title: 'API ishlab chiqish', service_api_desc: 'FastAPI yoki Django REST Framework bilan tezkor, masshtablanuvchi va xavfsiz REST APIlar — to\'liq hujjatlashtirilgan.',
+        testi_subtitle: 'Mijoz fikrlari', testi_title: 'Mijoz <span class="gradient-text">Sharhlari</span>',
+        contact_subtitle: 'Bog\'lanish', contact_title: "Keling, birga <span class=\"gradient-text\">Ishlaymiz</span>",
+        contact_desc: 'Loyihangiz bormi? Siz bilan bog\'lanishdan xursandman.',
+        contact_name: 'Ismingiz', contact_email: 'Elektron pochta', contact_message: 'Xabar',
+        contact_send: 'Xabar yuborish', contact_sending: 'Yuborilmoqda...',
+        contact_success: '✅ Xabar yuborildi! Tez orada javob beraman.',
+        contact_error: '⚠️ Xabar yuborib bo\'lmadi. To\'g\'ridan-to\'g\'ri pochtamga yozing.',
+        contact_direct: 'Yoki to\'g\'ridan-to\'g\'ri bog\'laning', contact_telegram: 'Telegram orqali yozish',
+        footer_build: 'Kelajakni bir satr kod bilan quramiz.',
+        footer_rights: 'Dasturchi. Barcha huquqlar himoyalangan.',
+        roles: ['Full Stack Dasturchi', 'FastAPI Mutaxassisi', 'Next.js Muhandisi', 'Bot Dasturchisi']
+      },
+      ru: {
+        nav_about: 'Обо мне', nav_projects: 'Проекты', nav_skills: 'Навыки', nav_services: 'Услуги', nav_contact: 'Контакт',
+        hero_available: 'Доступен для фриланс-проектов',
+        hero_hi: "Привет, я",
+        hero_desc: 'Я создаю <strong class="text-white">премиальные цифровые продукты</strong> — от сверхбыстрых API до full-stack приложений и умных Telegram ботов.',
+        hero_view_work: 'Мои работы', hero_hire_me: 'Нанять меня',
+        hero_years: 'Лет опыта', hero_projects: 'Проектов', hero_clients: 'Клиентов', hero_scroll: 'Вниз',
+        about_subtitle: 'Обо мне', about_title: 'Превращаю сложные<br/><span class="gradient-text">идеи в реальность.</span>',
+        about_p1: "Я увлеченный <strong class=\"text-white\">Full Stack разработчик</strong> с более чем 3-летним опытом. Специализируюсь на Python бэкендах (FastAPI и Django), React/Next.js и Telegram ботах.",
+        about_p2: 'Я верю в чистую архитектуру, идеальный дизайн и быструю доставку кода без ущерба качеству.',
+        about_card_front: 'Frontend разр.', about_card_front_desc: 'React, Next.js, Tailwind, TypeScript',
+        about_card_back: 'Backend разр.', about_card_back_desc: 'FastAPI, Django, REST, PostgreSQL',
+        about_card_bots: 'Telegram боты', about_card_bots_desc: 'aiogram, автоматизация бизнеса, AI боты',
+        about_card_ai: 'AI интеграция', about_card_ai_desc: 'OpenAI, LangChain, эмбеддинги',
+        about_card_devops: 'DevOps и Деплой', about_card_devops_desc: 'Docker, Vercel, Render, GitHub Actions, CI/CD',
+        projects_subtitle: 'Мои работы', projects_title: 'Избранные <span class="gradient-text">Проекты</span>',
+        projects_desc: 'Курируемая подборка проектов в веб-разработке, AI и автоматизации.',
+        projects_filter_all: 'Все', projects_filter_web: '🌐 Веб', projects_filter_bots: '🤖 Боты', projects_filter_ai: '🧠 AI',
+        skills_subtitle: 'Экспертиза', skills_title: 'Навыки и <span class="gradient-text">Опыт</span>',
+        skills_desc: 'Технологии и инструменты, которые я использую для создания премиальных решений.',
+        services_subtitle: 'Что я предлагаю', services_title: 'Мои <span class="gradient-text">Услуги</span>',
+        services_desc: 'Комплексные решения, адаптированные под ваши бизнес-цели.',
+        service_web_title: 'Веб-разработка', service_web_desc: 'Full-stack приложения на Next.js и FastAPI/Django — быстрые, адаптивные и оптимизированные для SEO.',
+        service_bots_title: 'Telegram боты', service_bots_desc: 'Умные боты для e-commerce, поддержки клиентов, автоматизации задач и AI-диалогов.',
+        service_api_title: 'Разработка API', service_api_desc: 'Высокопроизводительные, масштабируемые и безопасные REST API на FastAPI или Django — с полной документацией.',
+        testi_subtitle: 'Отзывы', testi_title: 'Отзывы <span class="gradient-text">клиентов</span>',
+        contact_subtitle: 'Связаться', contact_title: "Давайте <span class=\"gradient-text\">работать вместе</span>",
+        contact_desc: 'Есть проект на примете? Буду рад обсудить.',
+        contact_name: 'Ваше имя', contact_email: 'Эл. почта', contact_message: 'Сообщение',
+        contact_send: 'Отправить', contact_sending: 'Отправка...',
+        contact_success: '✅ Сообщение отправлено! Я скоро свяжусь с вами.',
+        contact_error: '⚠️ Не удалось отправить. Напишите мне на почту напрямую.',
+        contact_direct: 'Или свяжитесь напрямую', contact_telegram: 'Написать в Telegram',
+        footer_build: 'Строим будущее, по одной строке кода за раз.',
+        footer_rights: 'Разработчик. Все права защищены.',
+        roles: ['Full Stack разработчик', 'Эксперт FastAPI', 'Next.js инженер', 'Разработчик ботов']
+      }
+    };
+
+    // ---- Data ----
+    const projects = [
+      { id:1, title: {en:'E-Commerce Platform', uz:'E-Kommertsiya Platformasi', ru:'E-Commerce Платформа'}, desc: {en:'Multi-vendor marketplace with real-time order tracking and Telegram notifications.', uz:'Sotuvchilar uchun real vaqt rejimida buyurtmalarni kuzatish va Telegram xabarnomalariga ega marketpleys.', ru:'Маркетплейс со многими продавцами, отслеживанием заказов в реальном времени и Telegram-уведомлениями.'}, tech:['Next.js','FastAPI','PostgreSQL','Tailwind'], live:'#', github:'#', category:'Web', emoji:'🛒' },
+      { id:2, title: {en:'Restaurant Admin Panel', uz:'Restoran Admin Paneli', ru:'Админ-панель ресторана'}, desc: {en:'Premium dashboard with JWT auth, menu management, and live bot notifications to staff.', uz:'JWT autentifikatsiyasi, menyu boshqaruvi va xodimlarga bot orqali xabarnomalar yuboruvchi admin panel.', ru:'Премиум-панель с JWT-авторизацией, управлением меню и уведомлениями персонала через бота.'}, tech:['Django','React','SQLite','aiogram'], live:'#', github:'#', category:'Web', emoji:'🍽️' },
+      { id:3, title: {en:'AI Telegram Bot', uz:'AI Telegram Boti', ru:'AI Telegram Бот'}, desc: {en:'Intelligent bot powered by GPT-4 for customer support and business workflow automation.', uz:'Mijozlarni qo\'llab-quvvatlash va biznes jarayonlarini avtomatlashtirish uchun GPT-4 asosidagi aqlli bot.', ru:'Интеллектуальный бот на базе GPT-4 для поддержки клиентов и автоматизации бизнес-процессов.'}, tech:['Python','aiogram','OpenAI','Redis'], live:'#', github:'#', category:'Bots', emoji:'🤖' },
+      { id:4, title: {en:'Laptop Marketplace', uz:'Noutbuklar Do\'koni', ru:'Магазин ноутбуков'}, desc: {en:'Multi-vendor marketplace with multi-language support (Uzbek, Russian, English).', uz:'Ko\'p tilli (o\'zbek, rus, ingliz) qo\'llab-quvvatlanadigan noutbuklar bozori.', ru:'Маркетплейс ноутбуков с поддержкой нескольких языков (узбекский, русский, английский).'}, tech:['React','FastAPI','i18next','PostgreSQL'], live:'#', github:'#', category:'Web', emoji:'💻' },
+      { id:5, title: {en:'AI Content Generator', uz:'AI Kontent Generator', ru:'AI Генератор контента'}, desc: {en:'Generates blog posts, social captions, and marketing copy using LangChain and GPT-4.', uz:'LangChain va GPT-4 yordamida blog postlari va ijtimoiy tarmoqlar uchun matnlar yaratuvchi vosita.', ru:'Генератор постов, подписей и текстов с использованием LangChain и GPT-4.'}, tech:['Next.js','LangChain','OpenAI','FastAPI'], live:'#', github:'#', category:'AI', emoji:'✍️' },
+      { id:6, title: {en:'Auto-Reply Bot', uz:'Avto-Javob Boti', ru:'Бот авто-ответов'}, desc: {en:'Classifies and responds to customer inquiries using NLP and custom keyword rules.', uz:'NLP va maxsus qoidalar orqali mijozlar so\'rovlarini tasniflovchi va javob beruvchi bot.', ru:'Классифицирует и отвечает на запросы клиентов с помощью NLP и заданных правил.'}, tech:['Python','aiogram','spaCy','SQLite'], live:'#', github:'#', category:'Bots', emoji:'💬' },
+    ];
+    const skills = [
+      { name:'Python / FastAPI / Django', level:92 },
+      { name:'React / Next.js / TypeScript', level:88 },
+      { name:'Telegram Bots (aiogram)', level:90 },
+      { name:'PostgreSQL / SQLite / Redis', level:82 },
+      { name:'Docker / CI-CD / Vercel', level:75 },
+      { name:'AI / LangChain / OpenAI', level:72 },
+    ];
+
+    let currentLang = localStorage.getItem('portfolioLang') || 'en';
+
+    // ---- Init ----
+    document.addEventListener('DOMContentLoaded', () => {
+      // Loader
+      setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1200);
+
+      // Year
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Set initial language
+      setLanguage(currentLang);
+
+      // Render skills
+      renderSkills();
+
+      // Scroll reveal
+      observeReveal();
+
+      // Header scroll effect
+      window.addEventListener('scroll', () => {
+        const h = document.getElementById('header');
+        if (window.scrollY > 50) {
+          h.style.background = 'rgba(5,5,16,0.85)';
+          h.style.backdropFilter = 'blur(20px)';
+          h.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+        } else {
+          h.style.background = 'transparent';
+          h.style.backdropFilter = 'none';
+          h.style.borderBottom = 'none';
+        }
+      });
+    });
+
+    // ---- i18n Logic ----
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('portfolioLang', lang);
+      
+      // Update basic text nodes
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[lang][key]) {
+          el.innerHTML = i18n[lang][key];
+        }
+      });
+
+      // Update active button state
+      document.querySelectorAll('.lang-btn, .lang-btn-m').forEach(btn => {
+        if (btn.getAttribute('data-lang') === lang) {
+          btn.classList.add('bg-primary-500', 'text-white');
+          btn.classList.remove('glass');
+        } else {
+          btn.classList.remove('bg-primary-500', 'text-white');
+          btn.classList.add('glass');
+        }
+      });
+
+      // Re-trigger typing effect with new language roles
+      if (window.typingInterval) clearInterval(window.typingInterval);
+      typeText(i18n[lang].roles);
+
+      // Re-render projects with translated content
+      const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'All';
+      renderProjects(activeFilter);
+    }
+
+    // ---- Cursor glow ----
+    document.addEventListener('mousemove', e => {
+      const g = document.getElementById('cursor-glow');
+      g.style.left = e.clientX + 'px';
+      g.style.top = e.clientY + 'px';
+    });
+
+    // ---- Dark/Light Mode ----
+    let isDark = true;
+    function toggleTheme() {
+      isDark = !isDark;
+      const html = document.documentElement;
+      const body = document.body;
+      const sunIcon = document.getElementById('sun-icon');
+      const moonIcon = document.getElementById('moon-icon');
+      const sunIconM = document.getElementById('sun-icon-m');
+      const moonIconM = document.getElementById('moon-icon-m');
+      if (isDark) {
+        html.classList.add('dark');
+        body.style.background = '#050510';
+        body.style.color = 'white';
+        [sunIcon, sunIconM].forEach(el => el.classList.add('hidden'));
+        [moonIcon, moonIconM].forEach(el => el.classList.remove('hidden'));
+      } else {
+        html.classList.remove('dark');
+        body.style.background = '#f8fafc';
+        body.style.color = '#0f172a';
+        [sunIcon, sunIconM].forEach(el => el.classList.remove('hidden'));
+        [moonIcon, moonIconM].forEach(el => el.classList.add('hidden'));
+      }
+    }
+
+    // ---- Mobile Menu ----
+    function toggleMobileMenu() {
+      const m = document.getElementById('mobile-menu');
+      m.classList.toggle('open');
+    }
+
+    // ---- Typing Effect ----
+    function typeText(words) {
+      const el = document.getElementById('typed-text');
+      if (!el) return;
+      let wi = 0, ci = 0, deleting = false;
+      
+      const tick = () => {
+        const word = words[wi];
+        if (!deleting) {
+          el.textContent = word.substring(0, ++ci);
+          if (ci === word.length) { 
+            deleting = true; 
+            window.typingTimeout = setTimeout(tick, 1800); 
+            return; 
+          }
+        } else {
+          el.textContent = word.substring(0, --ci);
+          if (ci === 0) { 
+            deleting = false; 
+            wi = (wi + 1) % words.length; 
+          }
+        }
+        window.typingTimeout = setTimeout(tick, deleting ? 60 : 100);
+      };
+
+      if (window.typingTimeout) clearTimeout(window.typingTimeout);
+      tick();
+    }
+
+    // ---- Projects ----
+    function renderProjects(filter) {
+      const grid = document.getElementById('projects-grid');
+      const filtered = filter === 'All' ? projects : projects.filter(p => p.category === filter);
+      grid.innerHTML = filtered.map(p => `
+        <div class="project-card glass rounded-2xl overflow-hidden flex flex-col" data-cat="${p.category}">
+          <div class="h-44 flex items-center justify-center text-6xl" style="background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(139,92,246,0.12));">
+            ${p.emoji}
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-lg">${p.title[currentLang]}</h3>
+              <span class="text-xs px-2 py-1 rounded-full font-semibold" style="background:rgba(14,165,233,0.15);color:#38bdf8;">${p.category}</span>
+            </div>
+            <p class="text-sm text-gray-400 leading-relaxed mb-4 flex-1">${p.desc[currentLang]}</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              ${p.tech.map(t => `<span class="text-xs px-2 py-1 rounded-md font-mono" style="background:rgba(255,255,255,0.05);color:#94a3b8;">${t}</span>`).join('')}
+            </div>
+            <div class="flex gap-5">
+              <a href="${p.github}" class="flex items-center gap-1.5 text-sm font-semibold text-gray-400 hover:text-white transition-colors">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                GitHub
+              </a>
+              <a href="${p.live}" class="flex items-center gap-1.5 text-sm font-semibold text-primary-400 hover:text-primary-300 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                Live Demo
+              </a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterProjects(cat) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      const btn = document.querySelector(`[data-filter="${cat}"]`);
+      if (btn) btn.classList.add('active');
+      renderProjects(cat);
+    }
+
+    // ---- Skills ----
+    function renderSkills() {
+      const c = document.getElementById('skills-container');
+      c.innerHTML = skills.map(s => `
+        <div>
+          <div class="flex justify-between mb-2">
+            <span class="text-sm font-semibold">${s.name}</span>
+            <span class="text-sm text-primary-400 font-bold">${s.level}%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-level="${s.level}"></div></div>
+        </div>
+      `).join('');
+    }
+
+    // ---- Scroll Reveal + Skill Bars ----
+    function observeReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            entry.target.querySelectorAll('.skill-fill').forEach(bar => {
+              bar.style.width = bar.dataset.level + '%';
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    // ---- Testimonial Slider ----
+    let tIndex = 0;
+    const tTotal = 3;
+    function updateSlider() {
+      const track = document.getElementById('testimonial-track');
+      if (track) track.style.transform = `translateX(-${tIndex * 100}%)`;
+    }
+    function nextTestimonial() { tIndex = (tIndex + 1) % tTotal; updateSlider(); }
+    function prevTestimonial() { tIndex = (tIndex - 1 + tTotal) % tTotal; updateSlider(); }
+    setInterval(nextTestimonial, 5000);
+
+    // ---- Contact Form ----
+    async function submitContact(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const btnTxt = document.getElementById('btn-text');
+      const msg = document.getElementById('form-msg');
+      const name = document.getElementById('c-name').value;
+      const email = document.getElementById('c-email').value;
+      const message = document.getElementById('c-message').value;
+
+      btn.disabled = true;
+      const originalText = btnTxt.textContent;
+      btnTxt.textContent = i18n[currentLang].contact_sending;
+
+      try {
+        const res = await fetch('http://localhost:8000/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message })
+        });
+        if (res.ok) {
+          msg.textContent = i18n[currentLang].contact_success;
+          msg.className = 'text-center text-sm font-medium py-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+          document.getElementById('contact-form').reset();
+        } else throw new Error();
+      } catch {
+        msg.textContent = i18n[currentLang].contact_error;
+        msg.className = 'text-center text-sm font-medium py-3 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20';
+      }
+      msg.classList.remove('hidden');
+      btnTxt.textContent = originalText;
+      btn.disabled = false;
+      setTimeout(() => msg.classList.add('hidden'), 5000);
+    }
+  </script>
+</body>
+</html>
